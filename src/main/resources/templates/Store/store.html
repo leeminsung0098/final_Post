@@ -1,0 +1,178 @@
+<!doctype html>
+<html layout:decorate="~{layout}"
+      lang="ko" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+<!--    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">-->
+    <!-- sbb CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/Store/store.css}">
+    <title>방게!</title>
+</head>
+<body layout:fragment="content">
+
+<!--    최상단을 표시하기위한 -->
+<div id="scrolltop"></div>
+<div class="form">
+    <!--  머리부분 로그인 회원가입 등 시작-->
+    <div class=board_head>
+        <div class=board_tap>
+            <a class="logo" th:href="@{/UserBoard/main}">
+                <div>
+                    <p>방게</p>
+                    <p>방구석인테리어 게시판 </p>
+                </div>
+            </a>
+            <a class="logo_base" th:href="@{/UserBoard/main}">
+                <div>
+                    <p>유저게시판</p>
+                </div>
+            </a>
+            <a class="logo_base " th:href="@{/BusinessBoard/home}">
+                <div>
+                    <p>사업자 게시판</p>
+                </div>
+            </a>
+            <a class="logo_base select" th:href="@{/Store/}">
+                <div>
+                    <p>스토어</p>
+                </div>
+            </a>
+        </div>
+        <div class="board_login" sec:authorize="isAnonymous()">
+            <a  class="login"   th:href="@{/user/login}">
+                <div>
+                    <p >로그인</p>
+                </div>
+            </a>
+            /
+            <a th:href="@{/user/Initiation_General}" class="signup">
+                <div>
+                    <p>회원가입</p>
+                </div>
+            </a>
+        </div>
+        <div class="board_login" sec:authorize="isAuthenticated()">
+            <!--        sec:authorize="isAuthenticated()" 로그인 성공시 나오게 하는 코드       -->
+            <a class="login" th:if="${user.businessman_num == null}" th:href="@{/user/Business_General}">
+                <div>
+                    <p>사업자전환 /</p>
+                </div>
+            </a>
+
+            <a class="login" th:href="@{/user/logout}">
+                <div>
+                    <p>로그아웃</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <!--  머리부분 로그인 회원가입 등 끝-->
+    <hr>
+    <!-- 스토어 작업 -->
+    <div class="store_menu">
+        <ul>
+            <li th:each="board : ${boardList}">
+                <button class="button_bar"
+                        type="button"
+                        th:authorAddress="${board.author.businessman_site}"
+                        th:onclick="changeIframeSrc(this.getAttribute('authorAddress'))"
+                        th:text="${board.title}"
+                ></button>
+<!--                https://shopping.naver.com/home-->
+<!--               https://mall.hanssem.com/plan/16401.html?utm_source=google_sa_pc&utm_medium=paid_cpc&utm_campaign=T_mkt&utm_term=%ED%95%9C%EC%85%88&planType=08 -->
+            </li>
+        </ul>
+    </div>
+
+    <iframe id="myIframe" src="https://ohou.se/store" frameborder="0"></iframe>
+    <!-- 스토어 작업 끝 -->
+
+</div>
+<!--    최하단을 표시하기위한 -->
+<div id="scrollbottom"></div>
+
+
+<!--전체 챗화면 시작 스크립트 사용유의-->
+<div class="draggable_chat">
+    <!--  상단바     -->
+    <div class="chat_top_var">
+        <p>전체채팅창</p>
+        <button id="chat_close" type="button">X</button>
+    </div>
+    <!--  하단 챗부분 전송과 채팅창    -->
+    <div class="chat_main">
+        <div class="chat_body" id ="msgArea">
+        </div>
+
+        <div class="input_body">
+            <input type="text" id="msg">
+            <button type="button" id="button-send">전송</button>
+        </div>
+    </div>
+
+</div>
+<!--전체 챗화면 끝 스크립트 사용유의-->
+</body>
+<script layout:fragment="script" type='text/javascript'>
+
+    //웹뷰 링크 변경 시작
+    function changeIframeSrc(url) {
+      var iframe = document.getElementById("myIframe");
+      console.log("이동장소 : ",url)
+      iframe.src = url;
+    }
+//웹뷰 링크 변경 끝
+
+// 채팅창 움직이기용 시작
+const draggableElementChat = document.querySelector('.draggable_chat');
+let isDraggingChat = false;
+let offsetXChat = 0;
+let offsetYChat = 0;
+
+draggableElementChat.addEventListener('mousedown', function(event) {
+  isDraggingChat = true;
+  offsetXChat = event.clientX - draggableElementChat.getBoundingClientRect().left;
+  offsetYChat = event.clientY - draggableElementChat.getBoundingClientRect().top;
+});
+
+document.addEventListener('mousemove', function(event) {
+  if (isDraggingChat) {
+    const x = event.clientX - offsetXChat;
+    const y = event.clientY - offsetYChat;
+    draggableElementChat.style.left = x + 'px';
+    draggableElementChat.style.top = y + 'px';
+  }
+});
+
+document.addEventListener('mouseup', function() {
+  isDraggingChat = false;
+});
+// 채팅창 움직이기 끝
+
+
+
+// 채팅창 종료혹은 숨김처리 시작
+const chatCloseButton = document.getElementById("chat_close");
+chatCloseButton.addEventListener('click',()=>{
+  draggableElementChat.style.display= "none"
+})
+// 채팅창 종료혹은 숨김처리 끝
+
+
+//챗팅창 켜기 시작
+const globalChatOpen = document.getElementById("global_chat_open");
+globalChatOpen.addEventListener('click',()=>{
+  draggableElementChat.style.display = "block"
+})
+// 채팅창켜기 끝
+
+
+
+</script>
+</html>
+

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- sbb CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/userBoard_businessBoard/map.css}">
+    <title>방게!</title>
+</head>
+<body layout:fragment="content">
+<!-- 최상단을 표시하기위한 div -->
+<div id="scrolltop"></div>
+<div class="form">
+    <!--  머리부분 로그인 회원가입 등 시작-->
+    <div class=board_head>
+        <div class=board_tap>
+            <a class="logo" th:href="@{/UserBoard/main}">
+                <div>
+                    <p>방게</p>
+                    <p>방구석인테리어 게시판 </p>
+                </div>
+            </a>
+            <a class="logo_base " th:href="@{/UserBoard/main}">
+                <div>
+                    <p>유저게시판</p>
+                </div>
+            </a>
+            <a class="logo_base select" th:href="@{/BusinessBoard/home}">
+                <div>
+                    <p>사업자 게시판</p>
+                </div>
+            </a>
+            <a class="logo_base" th:href="@{/Store/}">
+                <div>
+                    <p>스토어</p>
+                </div>
+            </a>
+        </div>
+        <div class="board_login" sec:authorize="isAnonymous()">
+            <a class="login" th:href="@{/user/login}">
+                <div>
+                    <p>로그인</p>
+                </div>
+            </a>
+            /
+            <a th:href="@{/user/Initiation_General}" class="signup">
+                <div>
+                    <p>회원가입</p>
+                </div>
+            </a>
+        </div>
+        <div class="board_login" sec:authorize="isAuthenticated()">
+            <a class="login" th:if="${user.businessman_num == null}" th:href="@{/user/Business_General}">
+                <div>
+                    <p>사업자전환 /</p>
+                </div>
+            </a>
+
+            <a class="login" th:href="@{/user/logout}">
+                <div>
+                    <p>로그아웃</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <!--  머리부분 로그인 회원가입 등 끝-->
+    <hr>
+    <!--  상단 nav바 시작-->
+    <nav class="top_nav">
+        <a th:href="@{/BusinessBoard/home}">
+            <div>
+                <p>홈</p>
+            </div>
+        </a>
+        <a th:href="@{/BusinessBoard/part}">
+            <div>
+                <p>부분공사</p>
+            </div>
+        </a>
+        <a th:href="@{/BusinessBoard/integral}">
+            <div>
+                <p>전체공사</p>
+            </div>
+        </a>
+        <a th:href="@{/BusinessBoard/event}">
+            <div>
+                <p>이벤트</p>
+            </div>
+        </a>
+        <a th:href="@{/BusinessBoard/map}"  class="select" >
+            <div>
+                <p>업체퀵링크</p>
+            </div>
+        </a>
+    </nav>
+    <!--  상단 nav바 끝 -->
+    <!-- 상단 탑게시판 시작  -->
+    <div class="sflex">
+        <h3>업체 퀵링크</h3>
+    </div>
+
+
+    <div th:each="user : ${userList}">
+        <!-- Hidden input field to store the businessman's address -->
+        <input type="hidden" class="businessman-address" th:value="${user.businessman_address}"/>
+        <input type="hidden" class="businessman-id" th:value="${user.id}"/>
+    </div>
+    <div class="map_com">
+        <div>업체프로필</div>
+        <div>오시는 길</div>
+    </div>
+    <div class="mapping">
+        <img class="map_img" style="width:30%;height:350px;"
+             src="https://www.dycad.co.kr/img/images/architectural/architectural1.jpg" alt="Image">
+        <div id="map" style="width:50%;height:350px;"></div>
+    </div>
+    <div class="address_flex ">
+        <div class="address">
+            <p th:each="board : ${boardList}">
+                <button class="address_button"
+                        th:attr="data-userid=${board.author.id}, data-address=${board.author.businessman_address}"
+                        th:if="${board.author.businessman_address != null}"
+                        th:text="${board.title}" onclick="setCenter(this)">
+                </button>
+            </p>
+        </div>
+    </div>
+    <div class="mapList_a" th:each="board : ${boardList}">
+        <h2 th:text="${board.title}" th:style="'display:none;'" th:id="'title-' + ${board.author.id}"></h2>
+        <div th:utext="${board.content}" th:style="'display:none;padding-top :50px;'" th:id="'content-' + ${board.author.id}"></div>
+    </div>
+
+    <div class="p_button" sec:authorize="isAuthenticated()" th:each="board : ${boardList}">
+        <a th:href="@{|/BusinessBoard/Board_Modify_Map/${board.id}|}"
+           th:if="${board.author != null and #authentication.name == board.author.loginId}">
+            <button style="width:10%;">수정</button>
+        </a>
+    </div>
+
+    <!--        <div>-->
+    <!--            <a th:href="@{|/BusinessBoard/Board_Modify/${board.id}|}">-->
+    <!--                <button class="button button&#45;&#45;winona button&#45;&#45;border-thin button&#45;&#45;round-s" data-text="수정">-->
+    <!--                    <span>수정</span>-->
+    <!--                </button>-->
+    <!--            </a>-->
+    <!--        </div>-->
+    <!-- 가장아래를 표시하기위한 div  -->
+    <div id="scrollbottom"></div>
+</div>
+
+<!--우측 네비게이션용 시작-->
+<div class="popup_body">
+    <nav class="popup_nav">
+
+        <a href="#scrolltop" rel="nofollow">
+            <button class="nav_button nav_top">
+                TOP
+            </button>
+        </a>
+
+        <button class="nav_button" id="global_chat_open" ype="buttont">
+            전체 채팅
+        </button>
+
+        <button class="nav_button">유저<p>게시판</button>
+        <button class="nav_button">사업자<p>게시판</button>
+        <button class="nav_button">스토어</button>
+        <a href="#scrollbottom" rel="nofollow">
+            <button class="nav_button nav_down">
+                DOWN
+            </button>
+        </a>
+
+    </nav>
+</div>
+<!--우측 네비게이션용 끝  -->
+
+<!--전체 챗화면 시작 스크립트 사용유의-->
+<div class="draggable_chat">
+    <!--  상단바     -->
+    <div class="chat_top_var">
+        <p>전체채팅창</p>
+        <button id="chat_close" type="button">X</button>
+    </div>
+    <!--  하단 챗부분 전송과 채팅창    -->
+    <div class="chat_main">
+        <div class="chat_body">
+            운영자 : 대충 챗팅창
+        </div>
+
+        <div class="input_body">
+            <input type="text">
+            <button>전송</button>
+        </div>
+    </div>
+
+</div>
+</body>
+
+
+<!--카카오 맵 api 시작 -->
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=09c9238827f003ad34c030ac02964caa&libraries=services"></script>
+<script type="text/javascript">
+    var mapContainer = document.getElementById('map');
+    var mapOption = {
+      center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 초기 중심 좌표
+      level: 3 // 지도의 확대 레벨
+  };
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+
+     function displayMarker(address, title) {
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        geocoder.addressSearch(address, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: '<div style="width:150px;text-align:center;padding:6px 0;">' + title + '</div>'
+                });
+
+                infowindow.open(map, marker);
+                map.setCenter(coords);
+            }
+        });
+    }
+
+
+
+    // 업체 주소를 가지고 있는 요소들을 가져옵니다
+    var hiddenAddresses = document.getElementsByClassName('businessman-address');
+    var hiddenTitles = document.querySelectorAll('[id^="title-"]');
+    // 요소들의 수만큼 반복하면서 업체 위치를 지도에 표시합니다
+     console.log(hiddenAddresses)
+    for (var i = 0; i < hiddenAddresses.length; i++) {
+       var businessmanAddress = hiddenAddresses[i].value;
+       var title = hiddenTitles[i].textContent.trim();
+
+
+        displayMarker(businessmanAddress, title); // i + 1을 전달하여 1번 인덱스부터 시작하도록 수정
+
+    }
+
+
+
+
+function setCenter(button) {
+    var businessmanAddress = button.getAttribute('data-address');
+
+    var userId = button.getAttribute('data-userid');
+    var geocoder = new kakao.maps.services.Geocoder();
+
+        if (!businessmanAddress) {
+        console.error('Invalid address.');
+        return;
+    }
+
+    geocoder.addressSearch(businessmanAddress, function(result, status) {
+
+        if (status === kakao.maps.services.Status.OK) {
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            // 지도 중심을 이동 시킵니다
+                 console.log(businessmanAddress)
+
+            map.setCenter(coords);
+
+            // 해당 유저 아이디의 제목과 내용을 화면에 출력
+            var titles = document.querySelectorAll('[id^="title-"]');
+            var contents = document.querySelectorAll('[id^="content-"]');
+            titles.forEach(function(title) {
+                const titleArr = title.id.split('-');
+                if (titleArr[1]== userId) {
+                    title.style.display = 'block';
+                } else {
+                    title.style.display = 'none';
+                }
+            });
+
+            contents.forEach(function(content) {
+                const contentArr = content.id.split('-');
+                if (contentArr[1]==userId) {
+                    content.style.display = 'block';
+                } else {
+                    content.style.display = 'none';
+                }
+            });
+        } else {
+            console.error('Failed to geocode the address.');
+        }
+    });
+}
+
+
+
+</script>
+
+<!--카카오 맵 api 끝 -->
+<!--전체 챗화면 끝 스크립트 사용유의-->
+<script layout:fragment="script" type='text/javascript'>
+
+    // 채팅창 움직이기용 시작
+const draggableElementChat = document.querySelector('.draggable_chat');
+let isDraggingChat = false;
+let offsetXChat = 0;
+let offsetYChat = 0;
+
+draggableElementChat.addEventListener('mousedown', function(event) {
+  isDraggingChat = true;
+  offsetXChat = event.clientX - draggableElementChat.getBoundingClientRect().left;
+  offsetYChat = event.clientY - draggableElementChat.getBoundingClientRect().top;
+});
+
+document.addEventListener('mousemove', function(event) {
+  if (isDraggingChat) {
+    const x = event.clientX - offsetXChat;
+    const y = event.clientY - offsetYChat;
+    draggableElementChat.style.left = x + 'px';
+    draggableElementChat.style.top = y + 'px';
+  }
+});
+
+document.addEventListener('mouseup', function() {
+  isDraggingChat = false;
+});
+// 채팅창 움직이기 끝
+
+
+
+// 채팅창 종료혹은 숨김처리 시작
+const chatCloseButton = document.getElementById("chat_close");
+chatCloseButton.addEventListener('click',()=>{
+  draggableElementChat.style.display= "none"
+})
+// 채팅창 종료혹은 숨김처리 끝
+
+
+//챗팅창 켜기 시작
+const globalChatOpen = document.getElementById("global_chat_open");
+globalChatOpen.addEventListener('click',()=>{
+  draggableElementChat.style.display = "block"
+})
+// 채팅창켜기 끝
+//삭제
+const delete_elements = document.getElementsByClassName("delete");
+Array.from(delete_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            location.href = this.dataset.uri;
+        };
+    });
+});
+//삭제
+
+//추천관련 스크립트시작
+            const recommend_elements = document.getElementsByClassName("recommend");
+            Array.from(recommend_elements).forEach(function(element) {
+                element.addEventListener('click', function() {
+                    if(confirm("정말로 추천하시겠습니까?")) {
+                        location.href = this.dataset.uri;
+                    };
+                });
+            });
+//추천관련 스크립트 끝
+
+</script>
+
+
+</html>

@@ -1,0 +1,350 @@
+<!doctype html>
+<html layout:decorate="~{layout}"
+      lang="ko" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <!--    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">-->
+    <!-- sbb CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/userBoard_businessBoard/main.css}">
+    <title>방게!</title>
+</head>
+<body layout:fragment="content">
+<!-- 최상단을 표시하기위한 div -->
+<div id="scrolltop"></div>
+<div class="form">
+    <!--  머리부분 로그인 회원가입 등 시작-->
+    <div class=board_head>
+        <div class=board_tap>
+            <a class="logo" th:href="@{/UserBoard/main}">
+                <div>
+                    <p>방게</p>
+                    <p>방구석인테리어 게시판 </p>
+                </div>
+            </a>
+            <a class="logo_base " th:href="@{/UserBoard/main}">
+                <div>
+                    <p>유저게시판</p>
+                </div>
+            </a>
+            <a class="logo_base select" th:href="@{/BusinessBoard/home}">
+                <div>
+                    <p>사업자 게시판</p>
+                </div>
+            </a>
+            <a class="logo_base" th:href="@{/Store/}">
+                <div>
+                    <p>스토어</p>
+                </div>
+            </a>
+        </div>
+        <div class="board_login" sec:authorize="isAnonymous()">
+            <a class="login" th:href="@{/user/login}">
+                <div>
+                    <p>로그인</p>
+                </div>
+            </a>
+            /
+            <a th:href="@{/user/Initiation_General}" class="signup">
+                <div>
+                    <p>회원가입</p>
+                </div>
+            </a>
+        </div>
+        <div class="board_login" sec:authorize="isAuthenticated()">
+            <a class="login" th:if="${user.businessman_num == null}" th:href="@{/user/Business_General}">
+                <div>
+                    <p>사업자전환 /</p>
+                </div>
+            </a>
+
+            <a class="login" th:href="@{/user/logout}">
+                <div>
+                    <p>로그아웃</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <!--  머리부분 로그인 회원가입 등 끝-->
+    <hr>
+    <!--  상단 nav바 시작-->
+    <nav class="top_nav">
+        <a th:href="@{/BusinessBoard/home}" class="select">
+            <div>
+                <p>홈</p>
+            </div>
+        </a>
+        <a th:href="@{/BusinessBoard/part}">
+            <div>
+                <p>부분공사</p>
+            </div>
+        </a>
+        <a th:href="@{/BusinessBoard/integral}">
+            <div>
+                <p>전체공사</p>
+            </div>
+        </a>
+        <a th:href="@{/BusinessBoard/event}">
+            <div>
+                <p>이벤트</p>
+            </div>
+        </a>
+        <a th:href="@{/BusinessBoard/map}">
+            <div>
+                <p>업체퀵링크</p>
+            </div>
+        </a>
+    </nav>
+    <!--  상단 nav바 끝 -->
+    <!-- 상단 탑게시판 시작  -->
+    <div class="sflex">
+        <h3>팁 게시판</h3>
+        <a class="plus" href="#">더보기+</a>
+    </div>
+    <div class="tip_board">
+        <!--   왼쪽게시판은 데이터베이스내용의 탑 3위만 가져옴      -->
+        <div class="left_tip">
+            <a id="imageLink" href="#">
+                <img id="image_id"
+                     src="/image/view?file_name=red_it.jpg"
+                     alt="Image">
+            </a>
+            <div class="left_button">
+                <button>
+                    <
+                </button>
+            </div>
+            <div class="right_button">
+                <button>></button>
+            </div>
+        </div>
+        <!-- 오른쪽은 특별히 견적사항없음         -->
+        <div class="right_tip">
+            <a href="#">
+                <img src="/image/view?file_name=pxfuel.jpg" alt="Image">
+            </a>
+        </div>
+    </div>
+    <!-- 상단 탑게시판 끝  -->
+
+    <!-- 통합 게시판 시작   -->
+    <div class="sflex">
+        <h3>통합 게시판</h3>
+        <a class="plus" href="#">더보기+</a>
+    </div>
+    <div class="review_board">
+        <a href="/UserBoard/review">
+            <img src="/image/view?file_name=impressive-log-house-bedroom-design-wallpaper-1920x1080_48.jpg">
+        </a>
+        <a href="/UserBoard/review">
+            <img src="/image/view?file_name=living-room-design-with-gray-armchair-and-walls-painted-gray-and-red-wallpaper-1920x1080_48.jpg">
+        </a>
+        <a href="/UserBoard/review">
+            <img src="/image/view?file_name=beautiful-house-interior-wallpaper-1920x1080_48.jpg">
+        </a>
+        <a href="/UserBoard/review">
+            <img src="/image/view?file_name=modern-living-room-boutique-picture-3-wallpaper-1920x1080_48.jpg">
+        </a>
+        <a href="/UserBoard/review">
+            <img src="/image/view?file_name=yellow-corner-sofa-set-and-warm-and-modern-living-room-wallpaper-1920x1080_48.jpg">
+        </a>
+
+    </div>
+    <!-- 통합 게시판  끝-->
+    <!-- 사업자 뉴스 게시판 시작   -->
+    <div class="sflex">
+        <h3>뉴스 게시판</h3>
+        <a class="plus" href="#">더보기+</a>
+    </div>
+    <section id="magazine_list">
+        <h2 class="big_title"></h2>
+        <div id="magazine_list_inner" data-page="2">
+            <article class="magazine_item">
+                <a href="https://blog.naver.com/PostView.naver?blogId=hd_livart&logNo=222824424262" class="magazine_item_inner"
+                   title="게이머들을 위한 인테리어" data-url="2022-팬톤컬러-베리페리-Very-Peri">
+                    <figure class="magazine_item_img"><img src="/image/view?file_name=curved-monitor-laptop-and-desk-wallpaper-1920x1200_6.jpg"
+                                                           alt="게이머들을 위한 인테리어">
+                    </figure>
+                    <h3 class="title">"게이머들을 위한 인테리어"</h3>
+                </a>
+            </article>
+            <article class="magazine_item">
+                <a href="https://namu.wiki/w/%EC%9D%B8%ED%85%8C%EB%A6%AC%EC%96%B4" class="magazine_item_inner"
+                   title="해외 패키지 뉴스,'펩시의 재생 플라스틱(rPET) 패키지'" data-url="해외-패키지-뉴스-펩시-rPET-재생플라스틱">
+                    <figure class="magazine_item_img"><img src="/image/view?file_name=eszPfZduZVPkkJq0SLdZm46ffkqxMxLjolI_0o3i0yIxH5e-Bs4ePHgku_xO5SBGLtuxOcv8twILb0tltwg57Q.webp"
+                                                           alt="해외 패키지 뉴스,'펩시의 재생 플라스틱(rPET) 패키지' 포스팅 섬네일"></figure>
+                    <h3 class="title">인테리어를 알아보자. feat:나무위키 </h3>
+                </a>
+            </article>
+            <article class="magazine_item">
+                <a href="https://ohou.se/"
+                   class="magazine_item_inner" title="해외 패키지 뉴스, '패키지째 길러서 먹는 채소'"
+                   data-url="해외-패키지-뉴스-채소패키지">
+                    <figure class="magazine_item_img"><img src="/image/view?file_name=og-image.png"
+                                                           alt="해외 패키지 뉴스, '패키지째 길러서 먹는 채소' 포스팅 섬네일"></figure>
+                    <h3 class="title">오늘의 집'</h3>
+                </a>
+            </article>
+            <article class="magazine_item">
+                <a href="https://www.newswire.co.kr/?md=A01&cat=300&cat1=304"
+                   class="magazine_item_inner" title="해외 패키지 뉴스, '종이병에 든 코카콜라?'"
+                   data-url="해외-패키지-뉴스-종이병-코카콜라-종이패키지-지속가능성">
+                    <figure class="magazine_item_img"><img src="/image/view?file_name=news.png"
+                                                           alt="해외 패키지 뉴스, '종이병에 든 코카콜라?' 포스팅 섬네일"></figure>
+                    <h3 class="title">인테리어! 뉴스와이드</h3>
+                </a>
+            </article>
+            <article class="magazine_item">
+                <a href="https://mdesign.designhouse.co.kr/"
+                   class="magazine_item_inner"
+                   title="해외 패키지 뉴스, '1일 1디자인 프로젝트'"
+                   data-url="해외-패키지-뉴스-1일-1디자인-캔디자인-프로젝트">
+                    <figure class="magazine_item_img">
+                        <img src="/image/view?file_name=visual-dgn-img-6.png"
+                             alt="해외 패키지 뉴스, '1일 1디자인 프로젝트' 포스팅 섬네일"></figure>
+                    <h3 class="title">디자인이 곧 인테리어</h3>
+                </a>
+            </article>
+            <article class="magazine_item"><a href="https://www.designdb.com/?menuno=668#gsc.tab=0"
+                                              class="magazine_item_inner"
+                                              title="해외 패키지 뉴스, '2021 패키지 디자인 트렌드5'"
+                                              data-url="해외-패키지-뉴스-2021-패키지디자인-트렌드">
+                <figure class="magazine_item_img"><img src="/image/view?file_name=KIDP_thumb.jpg"
+                                                       alt="해외 패키지 뉴스, '2021 패키지 디자인 트렌드5' 포스팅 섬네일"></figure>
+                <h3 class="title">한국디자인진흥원</h3>
+            </a>
+            </article>
+        </div>
+    </section>
+    <!-- 사업자 뉴스 게시판  끝  -->
+
+
+</div>
+<!-- 가장아래를 표시하기위한 div  -->
+<div id="scrollbottom"></div>
+
+
+<!--전체 챗화면 시작 스크립트 사용유의-->
+<div class="draggable_chat">
+    <!--  상단바     -->
+    <div class="chat_top_var">
+        <p>전체채팅창</p>
+        <button id="chat_close" type="button">X</button>
+    </div>
+    <!--  하단 챗부분 전송과 채팅창    -->
+    <div class="chat_main">
+        <div class="chat_body" id="msgArea">
+        </div>
+
+        <div class="input_body">
+            <input type="text" id="msg">
+            <button type="button" id="button-send">전송</button>
+        </div>
+    </div>
+
+</div>
+<!--전체 챗화면 끝 스크립트 사용유의-->
+</body>
+
+<script layout:fragment="script" type='text/javascript'>
+
+// 이미지 교체 용 스크립트 시작
+function ChangeImage(image, link) {
+  var imageElement = document.getElementById("image_id");
+  imageElement.style.opacity = 0;  // 이미지 투명도를 0으로 설정하여 숨김
+  imageElement.src = image;
+  document.getElementById("imageLink").href = link;
+
+  // 이미지 투명도를 서서히 증가시켜 나타나도록 설정
+  setTimeout(function() {
+    imageElement.style.opacity = 1;
+  }, 400);
+
+  // 이미지 투명도를 서서히 감소시켜 사라지도록 설정
+  setTimeout(function() {
+    imageElement.style.opacity = 0;
+  }, 4600);  // 2800ms = 3000ms (이미지 전환 간격) - 200ms (이미지 나타나는 시간)
+}
+
+var imagesWithLinks = [
+  {
+    image: src="/image/view?file_name=curved-monitor-laptop-and-desk-wallpaper-1920x1200_6.jpg",
+    link: 'https://example.com/page1'
+  },
+  {
+    image: src="/image/view?file_name=fine-home-interior-living-room-picture-wallpaper-1920x1200_6.jpg",
+    link: 'https://example.com/page2'
+  },
+  {
+    image: src="/image/view?file_name=fine-home-interior-picture-wallpaper-1920x1080_48.jpg",
+    link: 'https://example.com/page3'
+  }
+];
+
+var index = 0;
+//이미지 자연스럽게 바꾸기위해 사용하는 용도
+function changeImageSequentially() {
+  ChangeImage(imagesWithLinks[index].image, imagesWithLinks[index].link);
+  index = (index + 1) % imagesWithLinks.length;
+
+  setTimeout(changeImageSequentially, 5000);
+}
+
+changeImageSequentially();
+// 이미지 교체 용 스크립트 끝
+
+
+// 채팅창 움직이기용 시작
+const draggableElementChat = document.querySelector('.draggable_chat');
+let isDraggingChat = false;
+let offsetXChat = 0;
+let offsetYChat = 0;
+
+draggableElementChat.addEventListener('mousedown', function(event) {
+  isDraggingChat = true;
+  offsetXChat = event.clientX - draggableElementChat.getBoundingClientRect().left;
+  offsetYChat = event.clientY - draggableElementChat.getBoundingClientRect().top;
+});
+
+document.addEventListener('mousemove', function(event) {
+  if (isDraggingChat) {
+    const x = event.clientX - offsetXChat;
+    const y = event.clientY - offsetYChat;
+    draggableElementChat.style.left = x + 'px';
+    draggableElementChat.style.top = y + 'px';
+  }
+});
+
+document.addEventListener('mouseup', function() {
+  isDraggingChat = false;
+});
+// 채팅창 움직이기 끝
+
+
+// 채팅창 종료혹은 숨김처리 시작
+const chatCloseButton = document.getElementById("chat_close");
+chatCloseButton.addEventListener('click',()=>{
+  draggableElementChat.style.display= "none"
+})
+// 채팅창 종료혹은 숨김처리 끝
+
+
+//챗팅창 켜기 시작
+const globalChatOpen = document.getElementById("global_chat_open");
+globalChatOpen.addEventListener('click',()=>{
+  draggableElementChat.style.display = "block"
+})
+// 채팅창켜기 끝
+
+
+
+
+
+
+
+</script>
+</html>
+

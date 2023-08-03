@@ -1,0 +1,30 @@
+<!--우측 네비게이션용 시작-->
+<div th:fragment="rightNavFragmentDiv" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="popup_body">
+        <nav class="popup_nav">
+            <a href="#scrolltop" rel="nofollow">
+                <button class="nav_button nav_top">
+                    TOP
+                </button>
+            </a>
+            <button class="nav_button" id="global_chat_open" type="buttont">
+                전체 채팅
+            </button>
+            <a th:href="@{/UserBoard/main}">
+                <button class="nav_button ">유저<p>게시판</button>
+            </a>
+            <a th:href="@{/BusinessBoard/home}">
+                <button class="nav_button">사업자<p>게시판</button>
+            </a>
+            <a th:href="@{/Store/}">
+                <button class="nav_button">스토어</button>
+            </a>
+            <a href="#scrollbottom" rel="nofollow">
+                <button class="nav_button nav_down">
+                    DOWN
+                </button>
+            </a>
+        </nav>
+    </div>
+</div>
+<!--우측 네비게이션용 끝  -->
